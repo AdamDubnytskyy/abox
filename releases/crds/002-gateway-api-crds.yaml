@@ -1,0 +1,55 @@
+# Gateway API CRDs, experimental channel, v1.6.2.
+#
+# This was a HelmRelease of ghcr.io/den-vasyliev/gateway-api-crds, but that
+# chart contained nothing except the two objects below, pinned to v1.4.0. It
+# only ever had a 1.4.0 tag published, so the version could not be moved
+# without republishing it. Inlining puts version and channel under our control.
+#
+# The experimental channel is required here, not a preference. agentgateway's
+# informers are typed to v1alpha2 for both TLSRoute and TCPRoute and do not
+# negotiate a served version via discovery:
+#
+#   watch error in cluster: failed to list *v1alpha2.TLSRoute:
+#   the server could not find the requested resource
+#
+# 1.4.0 standard had no TLSRoute CRD at all. 1.6.x standard does ship it, but
+# serves v1 only -- v1alpha2 is present with served: false -- so the API server
+# still 404s and the informer still hangs. Only experimental serves v1alpha2
+# alongside v1.
+#
+# This is not a stability trade for the resources actually in use: experimental
+# is a superset of standard, and Gateway, HTTPRoute, GRPCRoute and
+# ReferenceGrant are the same GA v1 types in both channels. It adds the alpha
+# CRDs and some extra optional fields.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: gateway-api
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://github.com/kubernetes-sigs/gateway-api
+  ref:
+    tag: v1.6.2
+  # Both channels are fetched even though only one is applied. The artifact is
+  # keyed on the git revision, so narrowing this to a single channel means a
+  # channel switch changes nothing source-controller notices: it keeps the old
+  # artifact and the Kustomization below fails with "kustomization path not
+  # found". Keeping /config/crd whole makes the path the only thing that moves.
+  ignore: |
+    /*
+    !/config/crd/
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: gateway-api-crds
+  namespace: flux-system
+spec:
+  interval: 1h
+  sourceRef:
+    kind: GitRepository
+    name: gateway-api
+  path: ./config/crd/experimental
+  prune: true
+  wait: true
