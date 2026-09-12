@@ -11,3 +11,11 @@
 ### Added
 
 - LLaMA server in embedding mode, load Nomic Embed Text v1.5 using the Q4_K_M quantized model
+
+## [0.0.3] - 2026-09-12
+
+### Added
+
+- Matryoshka Embeddings evaluation script
+
+- todo.md
