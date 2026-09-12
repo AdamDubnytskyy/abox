@@ -48,8 +48,9 @@ Start `llama.cpp's` HTTP server, load `Nomic Embed Text` v1.5 using the `Q4_K_M`
 Verify `llama-server` is running:
 
 ```sh
-ss -tnlp | grep llama
-LISTEN 0      512             127.0.0.1:8080       0.0.0.0:*    users:(("llama-server",pid=288909,fd=3))
+# health check
+curl http://localhost:8080/health
+{"status":"ok}
 ```
 
 ## Usage
