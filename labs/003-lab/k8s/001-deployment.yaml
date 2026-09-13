@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: clusterobserver-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: embedding-sidecar-demo
+  namespace: clusterobserver-demo
+  labels:
+    app: embedding-sidecar-demo
+    adr: "0002"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: embedding-sidecar-demo
+  template:
+    metadata:
+      labels:
+        app: embedding-sidecar-demo
+    spec:
+      containers:
+        # Demo "consumer" container — stands in for a real controller/reconciler
+        # pod that would call the embedding sidecar over localhost.
+        - name: app
+          image: curlimages/curl:8.10.1
+          command: ["sh", "-c", "sleep infinity"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+
+        # Embedding sidecar — ADR-0001: nomic-embed-text-v1.5, GGUF Q4_K_M.
+        # ADR-0002: Option 1, sidecar mode, reached over localhost.
+        - name: embedding-sidecar
+          image: ghcr.io/ggml-org/llama.cpp:server
+          args:
+            - "-hf"
+            - "nomic-ai/nomic-embed-text-v1.5-GGUF:Q4_K_M"
+            - "--embedding"
+            - "--pooling"
+            - "mean"
+            - "-c"
+            - "8192"
+            - "-b"
+            - "8192"
+            - "--rope-scaling"
+            - "yarn"
+            - "--rope-freq-scale"
+            - "0.75"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - "8080"
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            # Keep the downloaded GGUF on the mounted emptyDir instead of the
+            # container's root filesystem, so a container restart within the
+            # same pod lifecycle doesn't re-download the model.
+            - name: HF_HOME
+              value: /cache/huggingface
+          volumeMounts:
+            - name: model-cache
+              mountPath: /cache/huggingface
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 30 # allow up to ~5 min for first-time model download
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: model-cache
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: embedding-sidecar-demo
+  namespace: clusterobserver-demo
+spec:
+  selector:
+    app: embedding-sidecar-demo
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
