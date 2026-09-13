@@ -15,7 +15,7 @@ Unlike machine learning frameworks, Llama.cpp is designed to:
 
 ```sh
 
-cd llms/llama.cpp
+cd ../../llms/llama.cpp
 cmake -B build -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS
 cmake --build build -j --target llama-cli llama-embedding llama-server
 
@@ -36,30 +36,11 @@ Server configuration flags:
 Start `llama.cpp's` HTTP server, load `Nomic Embed Text` v1.5 using the `Q4_K_M` quantized model, operate exclusively as an embedding server, combine token representations using mean pooling, allow up to 2048 tokens of context, and process computation in batches of up to 512 tokens.
 
 ```sh
-./build/bin/llama-server \
-  -hf nomic-ai/nomic-embed-text-v1.5-GGUF:Q4_K_M \
-  --embedding \
-  --pooling mean \
-  -c 8192 \
-  -b 512 \
-  -ub 512
+make start-llama-server
 ```
 
-Verify `llama-server` is running:
+Verify `llama-server` is up & running:
 
 ```sh
-# health check
-curl http://localhost:8080/health
-{"status":"ok}
-```
-
-## Usage
-
-```sh
-curl http://localhost:8080/v1/embeddings \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "nomic-embed-text-v1.5",
-    "input": "search_query: test"
-  }'
+make llama-server-health-check
 ```

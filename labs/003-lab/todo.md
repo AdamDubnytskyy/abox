@@ -1,26 +1,19 @@
-Step 1: Install virtual env
+Step 1. Install dependencies
 
 ```sh
-python3 -m venv venv
-source venv/bin/activate
+make install-dependencies
 ```
 
-Step 2. Install dependencies
+Step 2. Start LLaMA server
 
 ```sh
-pip install -r requirements.txt
-
-# verify
-python3 -c "import requests; print(requests.__version__)"
+make start-llama-server
 ```
-
-Step 3. Start LLaMA server
 
 [See details how to start LLaMA server](https://github.com/AdamDubnytskyy/abox/blob/main/labs/003-lab/llama-server.md#start-server)
- 
-Step 4. Run MTR embeddings evaluation script
+
+Step 3: Run MTR embeddings evaluation script
 
 ```sh
-python3 eval_MTR_embeddings.py
-
+make evaluate_MTR_embeddings
 ```
