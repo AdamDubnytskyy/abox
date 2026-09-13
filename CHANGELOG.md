@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.0.9] - 2026-09-13
+
+### Added
+
+- Commands to [Makefile](./labs/003-lab/Makefile) in [003-lab](./labs/003-lab/) for embeddings sidecar deployment
+
 ## [0.0.8] - 2026-09-13
 
 ### Added

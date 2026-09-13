@@ -1,3 +1,5 @@
+# Development
+
 Step 1. Install dependencies
 
 ```sh
@@ -16,4 +18,20 @@ Step 3: Run MTR embeddings evaluation script
 
 ```sh
 make evaluate_MTR_embeddings
+```
+
+---
+
+# Production
+
+Step 1. Deploy embedding-sidecar-demo
+
+```sh
+make provision-sidecar
+```
+
+Step 2. Call the embedding sidecar from inside the demo pod to verify it works
+
+```sh
+make test-sidecar
 ```

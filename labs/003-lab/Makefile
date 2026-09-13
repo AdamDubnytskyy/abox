@@ -1,9 +1,11 @@
 help:
 	@echo "Available targets:"
-	@echo "  install-dependencies       - Install Python dependencies in a virtual environment"
+	@echo "  install-dependencies      - Install Python dependencies in a virtual environment"
 	@echo "  start-llama-server        - Start LLaMA server on port 8080"
 	@echo "  llama-server-health-check - Check health of LLaMA server"
 	@echo "  evaluate_MTR_embeddings   - Evaluate MTR embeddings using LLaMA server"
+	@echo "  provision-sidecar         - Apply Kubernetes manifest for embedding sidecar"
+	@echo "  test-sidecar              - Test embedding sidecar from inside demo pod"
 
 install-dependencies:
 	@bash scripts/install-dependencies.sh
@@ -32,7 +34,3 @@ test-sidecar: ## Call the embedding sidecar from inside the demo pod to verify i
 		curl -s -X POST http://localhost:8080/v1/embeddings \
 		-H "Content-Type: application/json" \
 		-d '{"model": "nomic-embed-text-v1.5", "input": "search_query: is the sidecar alive?"}'
-
-.PHONY: teardown-sidecar
-teardown-sidecar: ## Remove the sidecar demo deployment and namespace
-	kubectl delete -f $(MANIFEST) --ignore-not-found
