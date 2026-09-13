@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.0.6] - 2026-09-13
+
+### Added
+
+- [Architectural Decision Record](./cluster-observer/AD0001-clusterobserver.md)
+
 ## [0.0.5] - 2026-09-13
 
 ### Added
@@ -41,6 +47,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Provision Infrastructure
 
+[0.0.6]: https://github.com/AdamDubnytskyy/abox/compare/0.0.5...0.0.6
 [0.0.5]: https://github.com/AdamDubnytskyy/abox/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/AdamDubnytskyy/abox/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/AdamDubnytskyy/abox/compare/0.0.2...0.0.3
