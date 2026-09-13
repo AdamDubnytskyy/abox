@@ -1,9 +1,14 @@
 ---
 adr_id: "0002"
-title: Embedding Model Deployment Topology in the Kubernetes Cluster
-status: open
+comments:
+    - author: "Oleh Adam Dubnytskyy"
+      comment: "1"
+      date: "2026-09-13 19:58:26"
+related:
+    - "0001"
+status: decided
 supersedes: null
-related: ["0001"]
+title: Embedding Model Deployment Topology in Kubernetes Cluster
 ---
 
 ## <a name="question"></a> Context and Problem Statement
@@ -160,3 +165,8 @@ The tokenomics conclusion above holds across environments, but the size of the g
 ## <a name="more-info"></a> More Information
 
 If, at higher scale, embedding call volume or the number of provisioned instances becomes a measurable operational cost, consider a follow-up ADR evaluating a **plain shared embedding service per organization** (still `llama.cpp`-based, no llm-d) as an intermediate option between fully cluster-local instances and a fully centralized inference framework.
+## <a name="outcome"></a> Outcome
+We decided for [Option 1](#option-1) because: embedding workload (a 137M-parameter, CPU-friendly, single-shape model) does not need the architecture llm-d exists to provide, and the top-priority driver — Scalability — favors a topology whose overhead stays flat as clusters and organizations are added. The sidecar approach also wins on Security and multi-tenant isolation, both of which become sharper concerns once the deployment spans a control plane governing multiple organizations' clusters (see the Scenario Walkthroughs below)
+
+## <a name="comments"></a> Comments
+<a name="comment-1"></a>1. (2026-09-13 19:58:26) : marked decision as decided
