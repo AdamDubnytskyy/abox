@@ -8,4 +8,5 @@ Harness Engineering
 
 ## Architectural Decision Records
 
-- [001-ADR](https://github.com/AdamDubnytskyy/abox/blob/main/cluster-observer/AD0001-clusterobserver.md)
+- [001-ADR](https://github.com/AdamDubnytskyy/abox/blob/main/cluster-observer/AD0001-matryoshka-embedding-model-for-the-cluster-observer-kubernetes-native-agent.md)
+- [002-ADR](https://github.com/AdamDubnytskyy/abox/blob/main/cluster-observer/AD0002-embedding-model-deployment-topology-in-kubernetes-cluster.md)
