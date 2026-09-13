@@ -5,7 +5,7 @@ comments:
       comment: "1"
       date: "2026-09-13 14:41:09"
 status: decided
-title: ClusterObserver
+title: Matryoshka Embedding Model for the ClusterObserver Kubernetes-Native Agent
 ---
 
 ## <a name="question"></a> Context and Problem Statement
