@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.0.8] - 2026-09-13
+
+### Added
+
+- [ADR0002](./cluster-observer/AD0002-embedding-model-deployment-topology-in-kubernetes-cluster.md)
+
 ## [0.0.7] - 2026-09-13
 
 ### Changed
@@ -53,6 +59,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Provision Infrastructure
 
+[0.0.8]: https://github.com/AdamDubnytskyy/abox/compare/0.0.7...0.0.8
 [0.0.7]: https://github.com/AdamDubnytskyy/abox/compare/0.0.6...0.0.7
 [0.0.6]: https://github.com/AdamDubnytskyy/abox/compare/0.0.5...0.0.6
 [0.0.5]: https://github.com/AdamDubnytskyy/abox/compare/0.0.4...0.0.5
