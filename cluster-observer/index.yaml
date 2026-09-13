@@ -1,0 +1,9 @@
+decisions:
+    "0001":
+        adr_id: "0001"
+        title: ClusterObserver
+        status: decided
+        comments:
+            - author: ""
+              date: "2026-09-13 14:41:09"
+              comment: "1"
