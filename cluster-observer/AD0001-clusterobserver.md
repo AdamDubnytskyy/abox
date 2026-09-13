@@ -1,7 +1,7 @@
 ---
 adr_id: "0001"
 comments:
-    - author: ""
+    - author: "Oleh Adam Dubnytskyy"
       comment: "1"
       date: "2026-09-13 14:41:09"
 status: decided
