@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - gateway-api-crds.yaml
-  - agentgateway-crds.yaml
-  - inference-extension-crds.yaml
-  - kagent-crds.yaml
+  - 001-agentgateway-crds.yaml
+  - 002-gateway-api-crds.yaml
+  - 003-kagent-crds.yaml
+  - 004-inference-extension-crds.yaml
