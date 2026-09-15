@@ -10,7 +10,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1h
-  url: oci://ghcr.io/den-vasyliev/charts/agentregistry
+  url: oci://ghcr.io/AdamDubnytskyy/charts/agentregistry
   ref:
     tag: "0.5.16"
 ---
