@@ -63,7 +63,7 @@ spec:
       # the ImageVolume gate; both are present on the kind v1.37 nodes. The
       # model lands at <mountPath>/models/model.gguf because an image volume
       # mounts the image rootfs.
-      uri: oci://ghcr.io/AdamDubnytskyy/abox/nomic-embed:v1.18.1-4ccc0ff
+      uri: oci://ghcr.io/adamdubnytskyy/abox/nomic-embed:v1.18.1-4ccc0ff
       mountPath: /model-cache
       # These land on the pod template and are what the Service below selects.
       labels:

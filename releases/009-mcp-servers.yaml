@@ -40,7 +40,7 @@ spec:
     # Ours; scaffolded with `kmcp init go`, source in mcp/qdrant-mcp. Replaces
     # mcp-server-qdrant, which could only embed in-process with fastembed and
     # was OOMKilled doing it.
-    image: ghcr.io/AdamDubnytskyy/abox/qdrant-mcp:0.4.0
+    image: ghcr.io/adamdubnytskyy/abox/qdrant-mcp:0.4.0
     cmd: /app/server
     env:
       # Any OpenAI-compatible /v1/embeddings route. The standalone llama.cpp

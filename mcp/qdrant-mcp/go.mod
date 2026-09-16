@@ -1,4 +1,4 @@
-module github.com/AdamDubnytskyy/abox/mcp/qdrant-mcp
+module github.com/adamdubnytskyy/abox/mcp/qdrant-mcp
 
 go 1.23.0
 

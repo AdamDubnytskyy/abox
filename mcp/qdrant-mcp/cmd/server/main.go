@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/AdamDubnytskyy/abox/mcp/qdrant-mcp/internal/tools"
+	"github.com/adamdubnytskyy/abox/mcp/qdrant-mcp/internal/tools"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 

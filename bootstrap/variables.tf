@@ -19,7 +19,7 @@ variable "kubeconfig_path" {
 variable "oci_registry" {
   description = "OCI registry base URL"
   type        = string
-  default     = "oci://ghcr.io/AdamDubnytskyy/abox"
+  default     = "oci://ghcr.io/adamdubnytskyy/abox"
 }
 
 variable "releases_artifact" {

@@ -58,7 +58,7 @@ spec:
           # f16. That matches the deployment it was copied from, which is what
           # makes its vectors comparable with the cells that deployment
           # embedded.
-          image: ghcr.io/AdamDubnytskyy/abox/nomic-embed:v1.18.1-4ccc0ff
+          image: ghcr.io/adamdubnytskyy/abox/nomic-embed:v1.18.1-4ccc0ff
           # No command: -- the upstream ENTRYPOINT is the llama-server binary
           # and its path varies between image variants.
           args:
