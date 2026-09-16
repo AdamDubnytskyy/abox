@@ -50,13 +50,14 @@ jobs:
               | sed 's|^.*/||; s|[^A-Za-z0-9._-]|-|g' | tr '[:upper:]' '[:lower:]')"
           fi
           echo "name=${repo}" >> $GITHUB_OUTPUT
+          echo "owner=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
           echo "${GITHUB_REF_NAME} is on '${branch}' -> ${repo}"
 
       - name: Push OCI artifact
         id: push
         run: |
           TAG=${GITHUB_REF_NAME#v}
-          digest=$(flux push artifact oci://ghcr.io/${{ github.repository }}/${{ steps.repo.outputs.name }}:${TAG} \
+          digest=$(flux push artifact oci://ghcr.io/${{ steps.repo.outputs.owner }}/${{ steps.repo.outputs.name }}:${TAG} \
             --path="./releases" \
             --source="${{ github.repositoryUrl }}" \
             --revision="${{ github.ref_name }}@sha1:${{ github.sha }}" \
@@ -67,5 +68,5 @@ jobs:
       - name: Tag artifact
         run: |
           flux tag artifact \
-            oci://ghcr.io/${{ github.repository }}/${{ steps.repo.outputs.name }}:${{ steps.push.outputs.tag }}@${{ steps.push.outputs.digest }} \
+            oci://ghcr.io/${{ steps.repo.outputs.owner }}/${{ steps.repo.outputs.name }}:${{ steps.push.outputs.tag }}@${{ steps.push.outputs.digest }} \
             --tag latest
