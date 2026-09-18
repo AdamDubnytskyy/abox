@@ -8,7 +8,7 @@ name: Build nomic-embed image
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/llmd-embeddings]
     paths:
       - 'images/nomic-embed/**'
       - '.github/workflows/nomic-embed-image.yaml'
