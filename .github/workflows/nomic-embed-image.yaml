@@ -58,7 +58,7 @@ jobs:
           # llama.cpp server build. Bump it when either moves -- do not mutate a
           # published tag, since the Deployment pins this by tag.
           tags: |
-            ${{ env.IMAGE }}:v1.5-f16-b10920
+            ${{ env.IMAGE }}:v1.18.1-4ccc0ff
             ${{ env.IMAGE }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -67,6 +67,6 @@ jobs:
         run: |
           echo "### nomic-embed image pushed" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "${{ env.IMAGE }}:v1.5-f16-b10920" >> $GITHUB_STEP_SUMMARY
+          echo "${{ env.IMAGE }}:v1.18.1-4ccc0ff" >> $GITHUB_STEP_SUMMARY
           echo "digest: ${{ steps.build.outputs.digest }}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY

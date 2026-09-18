@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/adamdubnytskyy/qdrant-mcp
+  IMAGE: ghcr.io/adamdubnytskyy/abox/qdrant-mcp
 
 jobs:
   build:
