@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/adamdubnytskyy/nomic-embed
+  IMAGE: ghcr.io/adamdubnytskyy/abox/nomic-embed
 
 jobs:
   build:
