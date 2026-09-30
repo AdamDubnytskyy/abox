@@ -67,7 +67,7 @@ spec:
       # are two spaces and the vectors do not transfer. Repointing
       # EMBEDDINGS_BASE_URL is therefore a re-embed, not a copy.
       QDRANT_URL: http://qdrant.qdrant:6333
-      QDRANT_COLLECTION: abox-nomic
+      COLLECTION_NAME: abox-nomic
     resources:
       requests:
         cpu: 25m

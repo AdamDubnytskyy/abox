@@ -36,7 +36,7 @@ spec:
     env:
       # see: https://github.com/qdrant/mcp-server-qdrant/tree/master#environment-variables
       QDRANT_URL: http://qdrant.qdrant:6333
-      QDRANT_COLLECTION: abox-minilm
+      COLLECTION_NAME: abox-minilm
       EMBEDDING_PROVIDER: fastembed
       EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
       QDRANT_SEARCH_LIMIT: "12"
