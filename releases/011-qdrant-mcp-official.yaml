@@ -32,7 +32,7 @@ spec:
     imagePullPolicy: IfNotPresent
     cmd: mcp-server-qdrant
     secretRefs:
-      name: ghcr-auth
+      - name: ghcr-auth
     env:
       # see: https://github.com/qdrant/mcp-server-qdrant/tree/master#environment-variables
       QDRANT_URL: http://qdrant.qdrant:6333
