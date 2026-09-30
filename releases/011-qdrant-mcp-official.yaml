@@ -31,7 +31,7 @@ spec:
     image: ghcr.io/adamdubnytskyy/abox/mcp-server-qdrant:v1
     imagePullPolicy: IfNotPresent
     cmd: mcp-server-qdrant
-    secretRefs:
+    imagePullSecrets:
       - name: ghcr-auth
     env:
       # see: https://github.com/qdrant/mcp-server-qdrant/tree/master#environment-variables
