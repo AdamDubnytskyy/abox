@@ -40,6 +40,21 @@ spec:
       EMBEDDING_PROVIDER: fastembed
       EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
       QDRANT_SEARCH_LIMIT: "12"
+      TOOL_FIND_DESCRIPTION: >-
+        Semantic search over the knowledge base. It contains descriptions of
+        Kubernetes resources (Deployments, Services, Ingresses, ConfigMaps,
+        CronJobs) with the full YAML in metadata.manifest, plus saved notes and
+        decisions. ALWAYS call this before answering questions about what runs
+        in the cluster, container images, ports, routing, resources or past
+        decisions. The 'query' must be a natural-language description of what
+        you are looking for, e.g. "image used by payments-api deployment".
+        If results are not relevant, say that nothing was found instead of guessing.
+      TOOL_STORE_DESCRIPTION: >-
+        Save a durable fact, decision or finding for later retrieval.
+        'information' must be one or two self-contained sentences in natural
+        language that make sense without this conversation. Put structured data
+        in 'metadata', e.g. {"type": "decision|fact|note", "project": "...",
+        "namespace": "..."}. Never store secrets, passwords or tokens.
     resources:
       requests:
         cpu: 200m
