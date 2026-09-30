@@ -30,18 +30,18 @@ spec:
     # and stored in GitHub registry
     image: ghcr.io/adamdubnytskyy/abox/mcp-server-qdrant:v1
     imagePullPolicy: IfNotPresent
-    cmd: 
-  env:
-    # see: https://github.com/qdrant/mcp-server-qdrant/tree/master#environment-variables
-    QDRANT_URL: http://qdrant.qdrant:6333
-    QDRANT_COLLECTION: abox-minilm
-    EMBEDDING_PROVIDER: fastembed
-    EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
-    QDRANT_SEARCH_LIMIT: "12"
-  resources:
-    requests:
-      cpu: 200m
-      memory: 725Mi
-    limits:
-      cpu: "1"
-      memory: 2Gi
+    cmd: mcp-server-qdrant
+    env:
+      # see: https://github.com/qdrant/mcp-server-qdrant/tree/master#environment-variables
+      QDRANT_URL: http://qdrant.qdrant:6333
+      QDRANT_COLLECTION: abox-minilm
+      EMBEDDING_PROVIDER: fastembed
+      EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
+      QDRANT_SEARCH_LIMIT: "12"
+    resources:
+      requests:
+        cpu: 200m
+        memory: 725Mi
+      limits:
+        cpu: "1"
+        memory: 2Gi
