@@ -4,7 +4,7 @@ decisions:
         title: Matryoshka Embedding Model for the ClusterObserver Kubernetes-Native Agent
         status: decided
         comments:
-            - author: ""
+            - author: Oleh Adam Dubnytskyy
               date: "2026-09-13 14:41:09"
               comment: "1"
     "0002":
@@ -12,6 +12,19 @@ decisions:
         title: Embedding Model Deployment Topology in Kubernetes Cluster
         status: decided
         comments:
-            - author: ""
+            - author: Oleh Adam Dubnytskyy
               date: "2026-09-13 19:58:26"
+              comment: "1"
+    "0003":
+        adr_id: "0003"
+        title: VectorRetrievalEmbeddings
+        status: decided
+        tags:
+            - vector-retrieval
+            - embeddings
+            - qdrant
+            - mcp
+        comments:
+            - author: Oleh Adam Dubnytskyy
+              date: "2026-09-30 23:41:52"
               comment: "1"

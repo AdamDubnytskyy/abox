@@ -1,11 +1,27 @@
-# ADR: Embedding model and MCP server for agentic vector retrieval
+---
+adr_id: "0003"
+comments:
+    - author: Oleh Adam Dubnytskyy
+      comment: "1"
+      date: "2026-09-30 23:41:52"
+links:
+    precedes: []
+    succeeds: []
+status: decided
+tags:
+    - vector-retrieval
+    - embeddings
+    - qdrant
+    - mcp
+title: VectorRetrievalEmbeddings
+---
 
-- Status: Proposed (Layer 1 done, Layer 2 pending)
-- Date: 2026-09-30
-- Deciders: Adam Dubnytskyy
-- Scope: `retrieval-agent` / `retrieval-agent-official` in namespace `kagent`
+## <a name="question"></a> Question
 
-## Context
+Which embedding model and MCP server should the platform's retrieval agents use
+to answer questions about the cluster's own configuration (Flux releases, kagent
+agents, MCP servers, Gateway API routes), and what does each cost in quality,
+latency and operations?
 
 Agents in this cluster answer questions about the platform's own configuration
 (Flux releases, kagent agents, MCP servers, Gateway API routes). They retrieve
@@ -21,10 +37,18 @@ that knowledge through an MCP server backed by Qdrant. Two candidates exist:
 | Tools | `qdrant-find(query)`, `qdrant-store(information, metadata)` | `vector_find(query, limit)`, `vector_store(information, metadata: map[string]string)` |
 | Tool descriptions | overridden via `TOOL_FIND_DESCRIPTION` / `TOOL_STORE_DESCRIPTION` | defined in code |
 
-The question: which retrieval stack should the platform's agents use, and what
-does each cost in quality, latency and operations?
+## <a name="options"></a> Options
 
-## Decision drivers
+1. <a name="option-1"></a> Official mcp-server-qdrant with all-MiniLM-L6-v2 (`qdrant-mcp-official`, collection `abox-minilm`)
+2. <a name="option-2"></a> Own qdrant-mcp server with nomic-embed via llama.cpp (`qdrant-mcp`, collection `abox-nomic`)
+3. <a name="option-3"></a> Both, routed per data domain
+
+Option 3 is only considered if results show complementary strengths: two
+stores with the same data double ingest and make answers harder to attribute.
+
+## <a name="criteria"></a> Criteria
+
+### Decision drivers
 
 1. Retrieval quality on questions about our own manifests, including questions
    that do not reuse the manifest's wording.
@@ -33,9 +57,21 @@ does each cost in quality, latency and operations?
 3. Operational cost: extra services, memory, cold-start latency, failure modes.
 4. Portability: how much custom code we own and maintain.
 
-## Experiment setup
+### Decision rule
 
-### Data
+In order:
+
+1. If one option leads on paraphrased-question hit@3 by 0.15 or more and is not
+   worse on literal questions, choose it: that gap reflects real-world queries.
+2. If quality is within that margin, prefer the option with the smaller
+   operational footprint and less owned code (option 1), unless Layer 2 shows
+   agent behaviour differs materially.
+3. Either way, keep built-in agent memory disabled on retrieval agents and keep
+   the retrieval rule in the system prompt (findings 1 and 2).
+
+### Experiment setup
+
+#### Data
 
 - Source: `releases/` in this repository (the Flux source of truth).
 - 66 chunks generated, **64 unique** after de-duplication: `Namespace`
@@ -53,7 +89,7 @@ does each cost in quality, latency and operations?
   - `abox-nomic`: written through the server's own `vector_store` tool by
     `scripts/mcp_ingest.py`, so the stored format is the server's own.
 
-### Agents
+#### Agents
 
 | | `retrieval-agent-official` | `retrieval-agent` |
 |---|---|---|
@@ -67,7 +103,7 @@ does each cost in quality, latency and operations?
 Because the agents differ in more than the vector store, the evaluation has two
 layers.
 
-### Method
+#### Method
 
 **Layer 1: retrieval only.** `scripts/eval_retrieval.py` sends every question in
 `scripts/questions.yaml` straight to `qdrant-find` and `vector_find`, with no
@@ -84,9 +120,9 @@ embedding model.
 
 Question set: 14 answerable (7 literal, 7 paraphrased) and 2 unanswerable.
 
-## Results
+### Results
 
-### Layer 1: retrieval
+#### Layer 1: retrieval
 
 Run: 2026-09-30 19:30 UTC, `results/eval-20260930T193012Z.md`, top K = 5,
 14 answerable questions.
@@ -156,7 +192,7 @@ Per question:
   per MCP session (finding 6) is not included and is larger for the official
   server, which loads its model in every new session.
 
-### Layer 2: agentic retrieval
+#### Layer 2: agentic retrieval
 
 | ID | `retrieval-agent-official` tool / correct | `retrieval-agent` tool / correct | Notes |
 |---|---|---|---|
@@ -182,7 +218,7 @@ Per question:
 Smoke test before the full run: `retrieval-agent-official` answered q01, q02
 and q06 correctly, each after a single `qdrant-find` call.
 
-## Findings from the setup
+### Findings from the setup
 
 These came up while building the experiment and affect the decision regardless
 of the scores.
@@ -227,27 +263,9 @@ of the scores.
     HelmRelease is a literal string, not a variable, and caused 401s. Keys must
     come from a Secret via `valuesFrom`.
 
-## Options
+### Preliminary assessment
 
-1. **Official server with MiniLM** (`qdrant-mcp-official`).
-2. **Own server with nomic** (`qdrant-mcp`).
-3. **Both**, with a routing rule, e.g. one per data domain. Rejected up front
-   unless results show complementary strengths: two stores with the same data
-   double ingest and make answers harder to attribute.
-
-## Decision
-
-Preliminary, based on Layer 1; to be confirmed by Layer 2. Criteria, in order:
-
-1. If one option leads on paraphrased-question hit@3 by 0.15 or more and is not
-   worse on literal questions, choose it: that gap reflects real-world queries.
-2. If quality is within that margin, prefer the option with the smaller
-   operational footprint and less owned code (option 1), unless Layer 2 shows
-   agent behaviour differs materially.
-3. Either way, keep built-in agent memory disabled on retrieval agents and keep
-   the retrieval rule in the system prompt (findings 1 and 2).
-
-Applying them to Layer 1: criterion 1 is not met (paraphrase hit@3 is 0.57 for
+Applying the decision rule to Layer 1: criterion 1 is not met (paraphrase hit@3 is 0.57 for
 both, no gap), so criterion 2 applies and points to **option 1, the official
 server with MiniLM**: equal retrieval quality with no extra embedding service,
 half the vector size and no custom server code to maintain. The trade-offs
@@ -263,14 +281,22 @@ This preliminary decision is reversed if Layer 2 shows `retrieval-agent`
 answering materially more questions correctly for reasons attributable to
 nomic retrieval rather than to Neo4j or its prompt.
 
-## Consequences
+When Layer 2 confirms it, record the outcome, which also sets the status to
+`decided` and adds the Outcome section:
+
+```bash
+adg decide --model cluster-observer --id 0003 --option 1 \
+  --rationale "Equal retrieval quality (MRR 0.67 vs 0.65, same hit@k) with no extra embedding service, half the vector size and no custom server code."
+```
+
+### Consequences
 
 To fill in after the decision: migration of the unused store, removal of the
 unused MCP server and collection, CI job for re-indexing on merge to `main`
 (`index.py --prune` or `mcp_ingest.py` after deleting the collection), and
 monitoring of MCP session start-up time.
 
-## Reproduce
+### Reproduce
 
 ```bash
 cd scripts && source .venv/bin/activate
@@ -287,3 +313,8 @@ python eval_retrieval.py questions.yaml \
   --target minilm=http://localhost:3000/mcp,qdrant-find \
   --target nomic=http://localhost:3001/mcp,vector_find
 ```
+## <a name="outcome"></a> Outcome
+We decided for [Option 1](#option-1) because: Equal retrieval quality in a 14-question evaluation (MRR 0.67 vs 0.65, identical hit@1/3/5, no gap on paraphrased questions), with no extra embedding service, half the vector size and no custom server code to maintain.
+
+## <a name="comments"></a> Comments
+<a name="comment-1"></a>1. (2026-09-30 23:41:52) Oleh Adam Dubnytskyy: marked decision as decided
