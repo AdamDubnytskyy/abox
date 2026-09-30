@@ -28,7 +28,7 @@ spec:
   deployment:
     # Built from the upstream Dockerfile, see: https://github.com/qdrant/mcp-server-qdrant/blob/master/Dockerfile
     # and stored in GitHub registry
-    image: ghcr.io/adamdubnytskyy/abox/mcp-server-qdrant:v1
+    image: ghcr.io/adamdubnytskyy/abox/mcp-server-qdrant:0.4.0
     imagePullPolicy: IfNotPresent
     cmd: 
   env:
