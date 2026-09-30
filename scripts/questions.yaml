@@ -1,0 +1,120 @@
+# Evaluation questions for vector retrieval over releases/.
+# expected: the manifest(s) that contain the answer; a hit counts when its
+#           metadata kind AND name match any entry.
+# answer:   the correct answer, used when scoring agents (layer 2).
+# style:    literal = reuses manifest wording, paraphrase = different wording,
+#           negative = no answer in the data.
+# Lines marked "verify" are guesses about your repo: check them before running.
+
+questions:
+  - id: q01
+    style: literal
+    question: Which version of kagent is installed?
+    answer: "0.10.1"
+    expected:
+      - {kind: OCIRepository, name: kagent}
+      - {kind: HelmRelease, name: kagent}
+
+  - id: q02
+    style: literal
+    question: Where are requests to /api routed?
+    answer: "Service kagent-controller port 8083, via HTTPRoute kagent"
+    expected:
+      - {kind: HTTPRoute, name: kagent}
+
+  - id: q03
+    style: paraphrase
+    question: How is the kagent web interface published to users?
+    answer: "HTTPRoute kagent sends / to kagent-ui:8080 through gateway agentgateway-external"
+    expected:
+      - {kind: HTTPRoute, name: kagent}
+
+  - id: q04
+    style: literal
+    question: Which container image does the qdrant-mcp server run?
+    answer: "ghcr.io/adamdubnytskyy/abox/qdrant-mcp:0.4.0"
+    expected:
+      - {kind: MCPServer, name: qdrant-mcp}
+
+  - id: q05
+    style: paraphrase
+    question: Where does the custom vector search server get its embeddings from?
+    answer: "llama.cpp at http://llama-cpp-embeddings.llama-cpp:8090 (EMBEDDINGS_BASE_URL)"
+    expected:
+      - {kind: MCPServer, name: qdrant-mcp}
+
+  - id: q06
+    style: literal
+    question: Which Qdrant collection does the qdrant-mcp-official server use?
+    answer: "abox-minilm"
+    expected:
+      - {kind: MCPServer, name: qdrant-mcp-official}
+
+  - id: q07
+    style: literal
+    question: Which tools does the retrieval agent have?
+    answer: "qdrant-mcp (vector_store, vector_find), neo4j-mcp (get-schema, read-cypher, write-cypher), agent k8s-agent"
+    expected:
+      - {kind: Agent, name: retrieval-agent}
+
+  - id: q08
+    style: paraphrase
+    question: What must the agent check before saying something is missing from the data?
+    answer: "Call get-schema and run at least one read-cypher before reporting absence"
+    expected:
+      - {kind: Agent, name: retrieval-agent}
+
+  - id: q09
+    style: paraphrase
+    question: What has to be installed before kagent itself?
+    answer: "HelmRelease kagent-crds (dependsOn)"
+    expected:
+      - {kind: HelmRelease, name: kagent}
+
+  - id: q10
+    style: literal
+    question: Which ReferenceGrant lets HTTPRoutes reference Services in the kagent namespace?
+    answer: "ReferenceGrant kagent: from HTTPRoute in kagent to Service"
+    expected:
+      - {kind: ReferenceGrant, name: kagent}
+
+  - id: q11
+    style: paraphrase
+    question: Where is the kagent Helm chart pulled from?
+    answer: "OCI registry oci://ghcr.io/kagent-dev/kagent/helm/kagent via OCIRepository kagent"
+    expected:
+      - {kind: OCIRepository, name: kagent}
+      - {kind: HelmRelease, name: kagent}
+
+  - id: q12
+    style: paraphrase
+    question: Which LLM provider do the kagent agents use by default?
+    answer: "OpenAI (providers.default: openAI)"
+    expected:
+      - {kind: HelmRelease, name: kagent}
+
+  - id: q13
+    style: paraphrase
+    question: What runs the embedding model inside the cluster?
+    answer: "Deployment llama-cpp-embeddings in namespace llama-cpp (llama.cpp server)"
+    expected:
+      - {kind: Deployment, name: llama-cpp-embeddings}
+
+  - id: q14
+    style: literal
+    question: Which gateway is the kagent HTTPRoute attached to?
+    answer: "agentgateway-external in namespace agentgateway-system"
+    expected:
+      - {kind: HTTPRoute, name: kagent}
+
+  - id: q15
+    style: negative
+    answerable: false
+    question: Which Redis version is deployed?
+    answer: "Not in the data"
+
+  - id: q16
+    style: negative
+    answerable: false
+    question: What is the OpenAI API key used by kagent?
+    answer: "Not in the data (redacted); the agent must not produce a key"
