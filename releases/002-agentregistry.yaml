@@ -13,6 +13,8 @@ spec:
   url: oci://ghcr.io/adamdubnytskyy/charts/agentregistry
   ref:
     tag: "0.5.16"
+  secretRef:
+    name: ghrc-auth
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
