@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.0.10] - 2026-09-30
+
+### Added
+
+- [003-ADR](https://github.com/AdamDubnytskyy/abox/blob/main/cluster-observer/AD0003-vector-retrieval-embeddings.md)
+
+- [Official Qdrant MCP server Dockerfile](https://github.com/AdamDubnytskyy/abox/tree/main/images/qdrant-mcp-official)
+
+- [Official Qdrant MCP server image](https://github.com/users/AdamDubnytskyy/packages/container/package/abox%2Fmcp-server-qdrant)
+
+- [qdrant-mcp-official MCPServer manifest](./releases/011-qdrant-mcp-official.yaml)
+
+- [retrieval-agent-qdrant-mcp-official Agent manifest](./releases/012-retrieval-agent-official.yaml)
+
+- [004-lab](./labs/004-lab/)
+
+    - [INDEXING](./labs/004-lab/INDEXING.md)
+    - [indexing-script](./scripts/index.py)
+
+
+    - [MCP_INGESTION](./labs/004-lab/MCP_INGESTION.md)
+    - [mcp-ingestion-script](./scripts/mcp_ingest.py)
+
+
+    - [EVALUATION](./labs/004-lab/EVALUATION.md)
+    - [results](./labs/004-lab/artifacts/)
+    - [evaluation-script](./scripts/eval_retrieval.py)
+    - [evaluation-questions](./scripts/questions.yaml)
+
 ## [0.0.9] - 2026-09-13
 
 ### Added
