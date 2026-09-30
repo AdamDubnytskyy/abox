@@ -5,6 +5,7 @@ Harness Engineering
 
 - [002-lab](https://github.com/AdamDubnytskyy/abox/tree/main/labs/002-lab)
 - [003-lab](https://github.com/AdamDubnytskyy/abox/tree/main/labs/003-lab)
+- [004-lab](https://github.com/AdamDubnytskyy/abox/tree/feat/retrieval-agent/labs/004-lab)
 
 ## Architectural Decision Records
 
