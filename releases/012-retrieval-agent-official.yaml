@@ -1,0 +1,34 @@
+apiVersion: kagent.dev/v1alpha2
+kind: Agent
+metadata:
+  name: retrieval-agent-official
+  namespace: kagent
+spec:
+  declarative:
+    memory:
+      modelConfig: default-model-config
+    modelConfig: default-model-config
+    runtime: go
+    systemMessage: |-
+      You answer questions using only the vector store, via qdrant-find.
+      - Always call qdrant-find before answering ANY question, including questions
+        about the user, notes, or test data. Do not use any other memory.
+      - Phrase the query as a natural-language description of what you are
+        looking for.
+      - Answer only from what qdrant-find returned, and quote the document
+        (and metadata name/namespace/kind, if present) the answer came from.
+      - If the results do not contain the answer, say "not found in the
+        vector store" instead of guessing.
+      - Never call qdrant-store while answering a question.
+    tools:
+    - mcpServer:
+        apiGroup: kagent.dev
+        kind: MCPServer
+        name: qdrant-mcp-official
+        namespace: kagent
+        toolNames:
+        - qdrant-find
+        - qdrant-store
+      type: McpServer
+  description: knowledge base, qdrant-mcp-official
+  type: Declarative

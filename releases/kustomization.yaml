@@ -13,3 +13,4 @@ resources:
   - 009-mcp-servers.yaml
   - 010-neo4j.yaml
   - 011-qdrant-mcp-official.yaml
+  - 012-retrieval-agent-official.yaml
