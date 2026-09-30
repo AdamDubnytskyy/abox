@@ -1,27 +1,27 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: retrieval-llama-cpp
-  namespace: kagent
-type: Opaque
-stringData:
-  # llama-server does not check the key, but kagent's OpenAI provider requires
-  # one to be referenced.
-  apiKey: not-needed
----
-apiVersion: kagent.dev/v1alpha2
-kind: ModelConfig
-metadata:
-  name: retrieval-llama-cpp
-  namespace: kagent
-spec:
-  provider: OpenAI
-  # llama-server serves whatever it was started with and ignores this name.
-  model: nomic-embed-text-v1.5
-  apiKeySecret: retrieval-llama-cpp
-  apiKeySecretKey: apiKey
-  openAI:
-    baseUrl: http://llama-cpp-embeddings.llama-cpp:8090/v1
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: retrieval-llama-cpp
+#   namespace: kagent
+# type: Opaque
+# stringData:
+#   # llama-server does not check the key, but kagent's OpenAI provider requires
+#   # one to be referenced.
+#   apiKey: not-needed
+# ---
+# apiVersion: kagent.dev/v1alpha2
+# kind: ModelConfig
+# metadata:
+#   name: retrieval-llama-cpp
+#   namespace: kagent
+# spec:
+#   provider: OpenAI
+#   # llama-server serves whatever it was started with and ignores this name.
+#   model: nomic-embed-text-v1.5
+#   apiKeySecret: retrieval-llama-cpp
+#   apiKeySecretKey: apiKey
+#   openAI:
+#     baseUrl: http://llama-cpp-embeddings.llama-cpp:8090/v1
 ---
 apiVersion: kagent.dev/v1alpha2
 kind: Agent
@@ -34,16 +34,19 @@ spec:
   declarative:
     # Local llama.cpp (releases/007-llama-cpp-embeddings.yaml), see the
     # ModelConfig above.
-    modelConfig: retrieval-llama-cpp
+    modelConfig: gemini-gemini-3-5-flash
     stream: true
     systemMessage: |
       You are a data agent over two stores in this cluster. Which products
       back them is not your concern and can change; the tools are the contract.
+
       - A vector store, via vector_store / vector_find. Free text in, semantic
         search out. The collection is chosen by the server, not by you.
       - A graph, via get-schema / read-cypher / write-cypher. Entities and the
         relationships between them.
+
       ## Ingest
+
       Manifests come from the k8s-agent delegate. Ask it for the YAML of the
       objects you were told to ingest; it is the only tool here that can read
       the cluster.
@@ -54,6 +57,7 @@ spec:
       authored intent and bury the graph in edges nobody asked a question
       about. The references worth modelling are in spec: an Agent's
       spec.declarative.modelConfig and spec.declarative.tools[].
+
       1. Call get-schema first. Reuse existing labels and relationship types;
          invent new ones only when nothing fits.
       2. Model the graph like this, and only like this:
@@ -64,6 +68,7 @@ spec:
            on that property alone:
              MERGE (n:Agent {key: "kagent/k8s-agent"})
              SET n.name = "k8s-agent", n.namespace = "kagent", n.apiVersion = "..."
+
            MERGE on anything else creates duplicates: MERGE matches the whole
            pattern, so including a field that changes between reads makes a second
            node every time. There are uniqueness constraints on `key` -- if a write
@@ -89,7 +94,9 @@ spec:
          input is idempotent.
       4. Write the prose to the vector store with vector_store. Put name, namespace and kind
          in the metadata so a hit can be joined back to the graph.
+
       ## Retrieve
+
       Pick the store by the shape of the question, not by habit.
       - About the content of an object -- what it says, what it configures, find
         the manifest that does X -- use vector_find.
