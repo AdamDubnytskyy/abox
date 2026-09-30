@@ -1,0 +1,47 @@
+# 004-lab The official Qdrant MCP server, https://github.com/qdrant/mcp-server-qdrant
+#
+# Kubernetes cluster reconciles the upstream artifact.
+#
+# 
+# Runs alongside the shipped qdrant-mcp. The two are the arms of the comparison:
+#
+# qdrant-mcp           nomic-embed-text-v1.5, 768 dims, see: https://github.com/AdamDubnytskyy/abox/blob/main/labs/003-lab/eval_MTR_embeddings.py#L6https://github.com/AdamDubnytskyy/abox/blob/main/labs/003-lab/eval_MTR_embeddings.py#L6
+#                      embeds out-of-process against llama-cpp-embeddings,
+#                      collection abox-nomic
+#
+# 
+# qdrant-mcp-official  all-MiniLM-L6-v2, 384 dims,
+#                      embeds in-process with fasteembed,
+#                      collection abox-minilm
+#
+# Seperate collections are mandatory, not chaos: 384 and 786 dims cannot 
+# share one, and even at equal width vectors from different models do not.
+---
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: qdrant-mcp-official
+  namespace: kagent
+spec:
+  transportType: stdio
+  stdioTransport: {}
+  deployment:
+    # Built from the upstream Dockerfile, see: https://github.com/qdrant/mcp-server-qdrant/blob/master/Dockerfile
+    # and stored in GitHub registry
+    image: ghcr.io/adamdubnytskyy/abox/mcp-server-qdrant:v1
+    imagePullPolicy: IfNotPresent
+    cmd: 
+  env:
+    # see: https://github.com/qdrant/mcp-server-qdrant/tree/master#environment-variables
+    QDRANT_URL: http://qdrant.qdrant:6333
+    QDRANT_COLLECTION: abox-minilm
+    EMBEDDING_PROVIDER: fastembed
+    EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
+    QDRANT_SEARCH_LIMIT: "12"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 725Mi
+    limits:
+      cpu: "1"
+      memory: 2Gi
