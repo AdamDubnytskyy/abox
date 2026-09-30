@@ -20,7 +20,7 @@
 apiVersion: kagent.dev/v1alpha1
 kind: MCPServer
 metadata:
-  name: adrant-mcp-official
+  name: qdrant-mcp-official
   namespace: kagent
 spec:
   transportType: stdio
