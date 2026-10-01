@@ -1,6 +1,7 @@
 # ADR: Embedding model and MCP server for agentic vector retrieval
 
 - [ADR:Embedding model and MCP server for agentic vector retrieval](../../cluster-observer/AD0003-vector-retrieval-embeddings.md)
+- [questions](../../scripts/questions.yaml)
 
 ## Run te full evaluation
 
